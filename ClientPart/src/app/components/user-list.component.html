@@ -1,0 +1,71 @@
+<ng2-slim-loading-bar color="blue" ></ng2-slim-loading-bar>
+<ng2-toasty [position]="'top-right'"></ng2-toasty>
+<div class="container">
+    <div style="margin-top:20px">
+        <h2>Список пользователей</h2> 
+           <input type="button" routerLink='/user' value="Добавить" class="btn btn-outline-primary btn-sm" />
+        <hr/>    
+        <label>Параметры для поиска</label>
+        <div class="form-group row">
+            <div class="col-sm-3">
+                <input type="text" [(ngModel)]="searchParams.LastName" class="form-control form-control-sm" placeholder="Фамилия"/>
+            </div>    
+            <div class="col-sm-2">
+                <select class="form-control form-control-sm" name="Position" [(ngModel)] = "searchParams.PositionId"> 
+                        <option *ngFor="let position of positions" [value]="position.Id">
+                            {{position.Name}}
+                        </option>
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <select class="form-control form-control-sm" name="Deparmtment" [(ngModel)] = "searchParams.DepartmentId"> 
+                        <option *ngFor="let deparmtment of departments" [value]="deparmtment.Id">
+                            {{deparmtment.Name}}
+                        </option>
+                </select>
+            </div>  
+            <div class="col-sm-1">
+                <input type="button" value="Поиск" (click)="search()" class="btn btn-outline-secondary btn-sm"/>
+            </div>
+            <div class="col-sm-2">
+                <input type="button" value="Сбросить" (click)="clearSearch()" class="btn btn-outline-secondary btn-sm"/>
+            </div>
+        </div>
+
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Имя</td>
+                    <td>Фамилия</td>
+                    <td>Отчество</td>
+                    <td>Пол</td>
+                    <td>Фото</td>
+                    <td>Должность</td>
+                    <td>Подразделение</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td>{{user?.Id}}</td>
+                    <td>{{user?.FirstName}}</td>
+                    <td>{{user?.LastName}}</td>
+                    <td>{{user?.MiddleName}}</td>
+                    <td>{{user.IsMale ? "Муж" : "Жен"}}</td>
+                    <td><img [src]="user.ImgBase64 ? user.ImgBase64 : '../../assets/picture/avatar.jpg'" ></td>
+                    <td>{{user?.Position?.Name}}</td>
+                    <td>{{user?.Department?.Name}}</td>
+                    <td>
+                        <input type="button" value="Изменить" [routerLink]="['/user', user?.Id]" class="btn btn-warning btn-sm"  />
+                    </td>
+                    <td>
+                        <input type="button" value="Удалить" class="btn btn-danger btn-sm" (click)="delete(user?.Id)" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

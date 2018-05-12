@@ -1,0 +1,112 @@
+<ng2-slim-loading-bar color="blue"></ng2-slim-loading-bar>
+<ng2-toasty [position]="'top-right'"></ng2-toasty>
+<div class="container">
+  <div style="margin-top:20px">
+    <div class="row justify-content">
+      <div class="col-sm-8">
+      <h2>{{!editId ? "Создание пользователя" : "Изменение пользователя" }}</h2>
+      <hr/>
+      <form (ngSubmit)="!editId ? create() : update()" #UserForm="ngForm">
+        <div class="form-group row">
+          <label for="firstName" class="col-sm-3 col-form-label">Имя</label>
+          <div class="col-sm-7">
+            <input type="text" [(ngModel)]="user.FirstName" name="FirstName" class="form-control form-control-sm" placeholder="Имя" required #FirstName="ngModel" >
+            <div [hidden]="FirstName.valid || FirstName.pristine" class="top-margin alert alert-danger"> Поле обзательно для заполнения</div>  
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="lastName" class="col-sm-3 col-form-label">Фамилия</label>
+          <div class="col-sm-7">
+            <input type="name" [(ngModel)]="user.LastName" name="LastName" class="form-control form-control-sm" placeholder="Фамилия" required #LastName="ngModel">
+            <div [hidden]="LastName.valid || LastName.pristine" class="top-margin alert alert-danger"> Поле обзательно для заполнения</div>  
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="middleName" class="col-sm-3 col-form-label">Отчество</label>
+          <div class="col-sm-7">
+            <input type="name" [(ngModel)]="user.MiddleName" name="MiddleName" class="form-control form-control-sm" placeholder="Отчество">
+          </div>
+        </div>
+        <fieldset class="form-group">
+          <div class="row">
+            <legend class="col-form-label col-sm-3 pt-0">Пол</legend>
+            <div class="col-sm-7">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="gender" [(ngModel)]="user.IsMale" [value]="true" />
+                <label class="form-check-label" for="male">
+                  Мужской
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="gender" [(ngModel)]="user.IsMale" [value]="false" />
+                <label class="form-check-label" for="female">
+                  Женский
+                </label>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <div class="form-group row">
+          <label for="middleName" class="col-sm-3 col-form-label">Фото</label>
+          <div class="col-sm-7">
+              <img [src]="user.ImgBase64 ? user.ImgBase64 : '../../assets/picture/avatar.jpg'"><br>
+              <input type="file" [imageToDataUrl]="options" (imageSelected)="selected($event)">
+          </div>
+        </div>    
+        <div class="form-group row">
+            <label for="middleName" class="col-sm-3 col-form-label">Должность</label>
+            <div class="col-sm-7">
+                <select class="form-control form-control-sm" name="Position" [(ngModel)] = "user.PositionId" required #Position="ngModel"> 
+                    <option *ngFor="let position of positions" [value]="position.Id">
+                      {{position.Name}}
+                    </option>
+                </select>
+            </div>
+            <div [hidden]="Position.valid || Position.pristine" class="alert alert-danger"> Is required </div>  
+        </div> 
+        <div class="form-group row">
+            <label for="middleName" class="col-sm-3 col-form-label">Подразделений</label>
+            <div class="col-sm-7">
+                <select class="form-control form-control-sm" name="Department" [(ngModel)] = "user.DepartmentId" required #Department="ngModel">
+                    <option *ngFor="let department of departments" [value]="department.Id">
+                      {{department.Name}}
+                    </option>
+                </select>
+            </div>
+            <div [hidden]="Department.valid || Department.pristine" class="alert alert-danger"> Is required </div>  
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-3">Роли</div>
+          <div class="col-sm-7">
+              <div class="form-check" *ngFor="let role of roles">
+                <label class="form-check-label" for="role{{role.Id}}">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="role{{role.Id}}"
+                    name="roles"
+                    (change)="checkRole(role.Id)"
+                    [checked]="isCheckedRole(role.Id)">
+                  {{role.Name}}
+                </label>
+              </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-10">
+              <div class="float-right">
+                  <button type="button" routerLink="" class="btn btn-default">Назад</button>
+                  <span *ngIf="!editId">
+                      <button type="submit" [disabled]="!UserForm.form.valid" class="btn btn-info btn-sm">Создать</button>
+                  </span>
+                  <span *ngIf="editId">
+                      <button type="submit" [disabled]="!UserForm.form.valid" class="btn btn-info btn-sm">Изменить</button>
+                  </span>
+              </div>
+          </div>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
